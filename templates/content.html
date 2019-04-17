@@ -1,0 +1,90 @@
+{{ define "content" }}
+<ul>
+{{ if .ShowData}}
+    <form action="{{ .SubmitAction }}" method="post">
+    {{ range .Profiles }}
+
+        <span class="badge badge-primary">USER ID</span>
+        <span class="badge badge-light">{{ .UserId }}</span>
+        <button type="button" class="btn btn-primary">
+            PHOTOS WERE ALREADY BLOCKED <span class="badge badge-light">{{ .HowManyPhotosWereBlocked }}</span>
+            <span class="sr-only">unread messages</span>
+        </button>
+        <br/>
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="{{ .UserId }}_user_state"
+                   id="{{ .UserId }}_user_1"
+                   value="hide">
+            <label class="form-check-label" for="{{ .UserId }}_user_1">Hide</label>
+        </div>
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="{{ .UserId }}_user_state"
+                   id="{{ .UserId }}_user_2"
+                   value="nothing" checked>
+            <label class="form-check-label" for="{{ .UserId }}_user_2">Nothing</label>
+        </div>
+
+
+    {{/*<div class="card-group">*/}}
+    {{ range .Rows }}
+    <div class="row">
+
+    {{ range .Photos }}
+    <div class="col-sm-3">
+
+    {{ if .WasModeratedBefore}}
+    <div class="card text-black bg-light mb-3" style="max-width: 16rem;">
+    {{ else }}
+    {{ if .PhotoReported}}
+    <div class="card text-black bg-danger mb-3" style="max-width: 16rem;">
+    {{ else }}
+    <div class="card text-black bg-success mb-3" style="max-width: 16rem;">
+    {{ end }}
+    {{ end }}
+
+        <img src="{{ .PhotoUrl }}" class="card-img-top" alt="...">
+        <div class="card-body">
+            <p class="card-text">Report reasons : {{ .BlockReasons }}<br/>Likes : {{ .Likes }}<br/>Was hidden : {{ .OnlyOwnerCanSee }}<br/>Was moderated : {{ .WasModeratedBefore }}</p>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="{{ .PhotoId }}_photo_state"
+                       id="{{ .PhotoId }}_1"
+                       value="block">
+                <label class="form-check-label" for="{{ .PhotoId }}_1">Block</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="{{ .PhotoId }}_photo_state"
+                       id="{{ .PhotoId }}_2"
+                       value="hide">
+                <label class="form-check-label" for="{{ .PhotoId }}_2">Hide</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="{{ .PhotoId }}_photo_state"
+                       id="{{ .PhotoId }}_3"
+                       value="nothing" checked>
+                <label class="form-check-label" for="{{ .PhotoId }}_3">Nothing</label>
+            </div>
+        </div>
+    </div>
+
+    </div>
+    {{/*End dif for column*/}}
+
+    {{ end }}
+    {{/*End iterate during photos*/}}
+
+    </div>
+    {{/*End dif card group or row*/}}
+
+    {{ end }}
+    {{/*End iterate during rows*/}}
+
+    {{ end }}
+    {{/*End iterate during profiles*/}}
+
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+{{ else }}
+    <h1>{{ .Message }}</h1>
+{{ end }}
+</ul>
+{{ end }}
